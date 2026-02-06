@@ -1,0 +1,16 @@
+display_name = "LC-3 Simulator"
+authors = "Ryan Pendleton, gen04177"
+supported_extensions = "obj"
+corename = "lc3sim"
+manufacturer = "Educational"
+categories = "Emulator"
+systemname = "LC-3"
+database = "Educational - LC-3"
+license = "MIT"
+permissions = ""
+display_version = "0.1"
+supports_no_game = "false"
+
+firmware_count = 0
+
+description = "A libretro port for lc3sim, an educational LC-3 (Little Computer 3) virtual machine."

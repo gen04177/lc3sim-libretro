@@ -8,7 +8,7 @@ systemname = "LC-3"
 database = "Educational - LC-3"
 license = "MIT"
 permissions = ""
-display_version = "0.1"
+display_version = "0.2"
 supports_no_game = "false"
 
 firmware_count = 0

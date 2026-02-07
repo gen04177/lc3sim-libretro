@@ -13,8 +13,11 @@
 
 #include <sys/stat.h>
 #include <sys/time.h>
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <sys/mman.h>
-
+#endif
 #include "vm.h"
 
 #ifdef TRACE
@@ -176,26 +179,25 @@ void vm_load_os(vm_ctx vm) {
 }
 
 vm_load_result vm_load_file(vm_ctx vm, const char *file) {
-    int fd, ret;
-    struct stat statbuf;
-    unsigned char *data;
+    FILE *f = fopen(file, "rb");
+    if (!f)
+        return VM_LOAD_INPUT_NOT_FOUND;
 
-    if ((fd = open(file, O_RDONLY)) < 0) {
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    rewind(f);
+
+    unsigned char *data = malloc(size);
+    if (!data) {
+        fclose(f);
         return VM_LOAD_INPUT_NOT_FOUND;
     }
 
-    if ((ret = fstat(fd, &statbuf)) < 0) {
-        return VM_LOAD_INPUT_NOT_FOUND;
-    }
+    fread(data, 1, size, f);
+    fclose(f);
 
-    if ((data = mmap(0, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
-        return VM_LOAD_INPUT_NOT_FOUND;
-    }
-
-    vm_load_result result = vm_load_data(vm, data, statbuf.st_size);
-
-    munmap(data, statbuf.st_size);
-    close(fd);
+    vm_load_result result = vm_load_data(vm, data, size);
+    free(data);
 
     return result;
 }

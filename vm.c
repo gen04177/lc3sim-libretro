@@ -24,6 +24,7 @@
 #endif
 
 void (*vm_putchar_cb)(char c) = NULL;
+uint16_t (*vm_getchar_cb)(void) = NULL;
 
 extern unsigned char lc3os_obj[];
 extern unsigned int lc3os_obj_len;
@@ -435,8 +436,13 @@ static vm_run_result vm_perform(vm_ctx vm, vm_byte instr) {
             DEBUG_TRACE("VM_OPCODE_TRAP trapvect8 %x\n", trapvect8);
 
             if (trapvect8 == 0x20) {
-                // handle GETC efficiently to prevent high CPU usage when idle
-                vm->reg[0] = getchar();
+                uint16_t c = lc3_getchar();
+                if (c != 0xFFFF) {
+                    vm->reg[0] = c;
+                }
+            else {
+	            vm->reg[VM_REG_PC]--;
+            }
             }
             else {
                 // fallback to OS implementation of remaining traps

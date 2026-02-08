@@ -16,7 +16,10 @@
 #ifdef _WIN32
 #include <windows.h>
 #else
+#ifdef __SWITCH__
+#else
 #include <sys/mman.h>
+#endif
 #endif
 #include "vm.h"
 

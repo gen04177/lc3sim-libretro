@@ -29,6 +29,6 @@ vm_load_result vm_load_data(vm_ctx vm, unsigned const char *data, size_t length)
 
 vm_run_result vm_run(vm_ctx vm);
 vm_run_result vm_step(vm_ctx vm);
-extern void (*vm_putchar_cb)(char c);
+extern void (*vm_putchar_cb)(uint16_t c);
 extern uint16_t (*vm_getchar_cb)(void);
 uint16_t lc3_getchar(void);
